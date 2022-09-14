@@ -1,14 +1,31 @@
 server:
-  port: 8060
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka
-  instance:
-    preferIpAddress: true
+  port: 7777
 spring:
+  application:
+    name: gateway-service
+  config:
+    import: configserver:http://localhost:8888
   cloud:
     gateway:
       discovery:
         locator:
-          enabled: true
+          enabled: true  # default false
+      routes:
+        - id: user-profile-service-route
+          uri: lb://USER-PROFILE-SERVICE
+          predicates:
+            - Path=/api/profiles/**
+        - id: admin-service-route
+          uri: lb://ADMIN-SERVICE
+          predicates:
+            - Path=/api/admin/**
+  logging:
+    pattern:
+      console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+    level:
+      root: TRACE
+logging:
+  level:
+    org:
+      springframework:
+        web: TRACE
