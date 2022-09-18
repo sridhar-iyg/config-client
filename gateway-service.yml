@@ -15,13 +15,29 @@ spring:
           uri: lb://ADMIN-SERVICE
           predicates:
             - Path=/api/admin/**
-  logging:
-    pattern:
-      console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
-    level:
-      root: TRACE
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+    logging:
+      pattern:
+        console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+      level:
+        root: TRACE
+
 logging:
   level:
     org:
       springframework:
         web: TRACE
+springdoc:
+  version: '@springdoc.version@'
+  swagger-ui:
+    use-root-path: true
+    urls:
+      - name: user-profile
+        url: /v3/api-docs/profiles
+      - name: admin
+        url: /v3/api-docs/admin
