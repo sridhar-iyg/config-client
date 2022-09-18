@@ -38,6 +38,6 @@ springdoc:
     use-root-path: true
     urls:
       - name: user-profile
-        url: /v3/api-docs/profiles
+        url: /v3/api-docs/api/profiles
       - name: admin
-        url: /v3/api-docs/admin
+        url: /v3/api-docs/api/admin
